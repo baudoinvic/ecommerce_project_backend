@@ -4,6 +4,7 @@ const router = require("express").Router();
 //  const stripe = require("stripe")(KEY);
 
 router.post("/payment", (req, res) => {
+  console.log(req.body.amount)
   stripe.charges.create(
     {
       source: req.body.tokenId,

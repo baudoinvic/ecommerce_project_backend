@@ -6,8 +6,11 @@ const jwt = require("jsonwebtoken");
 //REGISTER
 router.post("/register", async (req, res) => {
   const newUser = new User({
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
     username: req.body.username,
     email: req.body.email,
+    address: req.body.address,
     password: CryptoJS.AES.encrypt(
       req.body.password,
       process.env.PASS_SEC
@@ -44,7 +47,7 @@ router.post("/login", async (req, res) => {
         isAdmin: user.isAdmin,
       },
       process.env.JWT_SEC,
-      {expiresIn:"3d"}
+      {expiresIn:"7d"}
     );
 
     const { password, ...others } = user._doc;
@@ -53,6 +56,18 @@ router.post("/login", async (req, res) => {
   } catch (err) {
     res.status(500).json(err);
   }
+
+   //PAYMENT
+router.post("/payment", async (req, res) => {
+  // Process payment
+  const transaction = {
+    id: 1,
+    amount: 100,
+    method: 'credit card',
+    datetime: new Date()
+  }
+  res.send({ success: true, transaction })
+});
 });
 
 module.exports = router;
