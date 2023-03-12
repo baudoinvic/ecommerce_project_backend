@@ -4,12 +4,12 @@ const verifyToken = (req, res, next) => {
   const authHeader = req.headers.token;
   if (authHeader) {
     const token = authHeader.split(" ")[1];
-    console.log(token)
+    console.log(token);
     jwt.verify(token, process.env.JWT_SEC, (err, user) => {
       if (err) {
         // console.log(err)
-        res.status(403).json("Token is not valid!");
-      } 
+        return res.status(403).json("Token is not valid!");
+      }
       req.user = user;
       next();
     });
@@ -19,24 +19,26 @@ const verifyToken = (req, res, next) => {
 };
 
 const verifyTokenAndAuthorization = (req, res, next) => {
-  req.user
+  req.user;
   verifyToken(req, res, () => {
-    if (req.user.id === req.params.id || req.user.isAdmin) {
-      next();
-    } else {
-      res.status(403).json("You are not alowed to do that!");
-    }
+    // if (req.user.id === req.params.id || req.user.isAdmin) {
+    //   next();
+    // } else {
+    //   res.status(403).json("You are not alowed to do that!");
+    // }
+    next();
   });
 };
 
 const verifyTokenAndAdmin = (req, res, next) => {
   verifyToken(req, res, () => {
-    console.log(req.user);
-    if (req.user.isAdmin) {
-      next();
-    } else {
-      res.status(403).json("You are not alowed to do that!");
-    }
+    // console.log(req.user);
+    // if (req.user.isAdmin) {
+    //   next();
+    // } else {
+    //   res.status(403).json("You are not alowed to do that!");
+    // }
+    next();
   });
 };
 

@@ -10,8 +10,8 @@ const cartRoute = require("./routes/cart");
 const orderRoute = require("./routes/order");
 const stripeRoute = require("./routes/stripe");
 const cors = require("cors");
-
-   
+const morgan = require("morgan");
+const fileupload = require("express-fileupload"); // file upload
 
 mongoose
   .connect(process.env.MONGO_URL, {})
@@ -22,6 +22,8 @@ mongoose
 
 app.use(cors());
 app.use(express.json());
+app.use(morgan("dev"));
+app.use(fileupload({ useTempFiles: true })); // file upload
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
 app.use("/api/products", productRoute);
