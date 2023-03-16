@@ -29,15 +29,11 @@ router.post("/", async (req, res) => {
 });
 
 //UPDATE
-router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
+router.patch("/:id", async (req, res) => {
   try {
-    const updatedProduct = await Product.findByIdAndUpdate(
-      req.params.id,
-      {
-        $set: req.body,
-      },
-      { new: true }
-    );
+    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, {
+      $set: req.body,
+    });
     res.status(200).json(updatedProduct);
   } catch (err) {
     res.status(500).json(err);
@@ -45,7 +41,7 @@ router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
 });
 
 //DELETE
-router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     await Product.findByIdAndDelete(req.params.id);
     res.status(200).json("Product has been deleted...");
@@ -84,7 +80,20 @@ router.get("/", async (req, res) => {
     }
 
     res.status(200).json(products.reverse());
-    console.log(products);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// GET PRODUCTS BY CATEGORY
+
+router.get("/:category", async (req, res) => {
+  try {
+    const { category } = req.params;
+    const products = await Product.find({
+      categories: category,
+    });
+    res.status(200).json(products.reverse());
   } catch (err) {
     res.status(500).json(err);
   }
